@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>小公主的韓式料理</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fffaf0;
+      color: #333;
+    }
+    header {
+      background-color: #b22222;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      margin: 0;
+      font-size: 36px;
+    }
+    header p {
+      margin: 0;
+      font-size: 18px;
+    }
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      font-size: 28px;
+      color: #b22222;
+      margin-top: 40px;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .dish {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      width: 200px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .dish img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .dish h3 {
+      margin: 10px 0 5px;
+      font-size: 18px;
+    }
+    .dish p {
+      font-size: 14px;
+      color: #666;
+    }
+    .dish button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #b22222;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #cart {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+    }
+    #cart h4 {
+      margin-top: 0;
+    }
+    #cart-list {
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+    }
+    #checkout-btn {
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #228b22;
+      color: white;
+      border: none;
+      width: 100%;
+      border-radius: 5px;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 40px;
+    }
+
+    /* ✅ 手機版購物車調整 */
+    @media (max-width: 600px) {
+      #cart {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        top: auto;
+        bottom: 20px;
+        border-radius: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>小公主的韓式料理</h1>
+    <p>帶給您正宗的韓式美食體驗</p>
+  </header>
+
+  <div id="cart">
+    <h4>購物車</h4>
+    <ul id="cart-list"></ul>
+    <p id="total">總計：$0</p>
+    <button id="checkout-btn" onclick="checkout()">結帳</button>
+  </div>
+
+  <main id="menu-container"></main>
+
+  <footer>
+    <p>地址：新北市淡水區新民街180巷123號1樓</p>
+    <p>聯絡我們：anita.chen0201@gmail.com</p>
+  </footer>
+
+  <script>
+    const cart = {};
+
+    const categories = {
+      '人氣料理推薦': [
+        ['kimchi.jpg', '泡菜鍋', '酸辣濃郁，暖胃必吃！', 250],
+        ['bibimbap.jpg', '石鍋拌飯', '新鮮蔬菜與香濃拌醬的完美結合。', 220],
+        ['tteokbokk.jpg', '辣炒年糕', '甜辣口感，讓人回味無窮。', 180],
+        ['soondubu.jpg', '韓式豆腐鍋', '濃郁湯底，溫暖人心的家常好味道。', 230],
+        ['kor_budaejjigae_main.jpg', '韓式部隊鍋', '香濃韓式火鍋，滿滿熱騰騰料。', 280],
+        ['seafood_hotpot_kor.jpg', '韓式海鮮鍋', '鮮美海鮮湯，盡享大海滋味。', 260],
+        ['kor_blackbean_noodle.jpg', '韓式炸醬麵', '濃郁黑醬麵，完美融合甜鹹。', 190],
+        ['korean_gimbap.jpg', '韓式飯捲', '濃郁湯底，溫暖人心的家常好味道。', 160]
+      ],
+      '配菜': [
+        ['kimchi_pancake.jpg', '泡菜煎餅', '酸辣爽口，香脆可口的經典韓式煎餅。', 200],
+        ['seafood_pancake.jpg', '海鮮煎餅', '滿滿海味，外酥內嫩的韓式美味。', 220],
+        ['yangnyeom_chicken.jpg', '韓式洋釀炸雞', '甜辣醬汁裹滿，每口都香濃過癮。', 240],
+        ['honey_chicken.jpg', '韓式蜂蜜炸雞', '濃郁蜂蜜香，甜滋滋的炸雞享受。', 240]
+      ],
+      '飲料': [
+        ['yuzu_tea.jpg', '韓式柚子茶', '清新甘甜，帶有柚子的香氣與果肉。', 90],
+        ['strawberry_milk.jpg', '草莓牛奶', '甜美草莓融入濃醇牛奶，香濃可口。', 80],
+        ['banana_milk.jpg', '香蕉牛奶', '韓國經典，濃郁香甜的香蕉風味。', 80],
+        ['calpis_drink.jpg', '可爾必思', '酸甜清爽，最具人氣的韓式飲品。', 70]
+      ],
+      '甜點': [
+        ['yuzu_mochi.jpg', '韓式柚子大福', '柚香濃郁，Q彈外皮包裹果香滿溢的內餡。', 100],
+        ['dalgona_ice_cream.jpg', '韓式椪糖霜淇淋', '經典椪糖搭配濃滑霜淇淋，酥脆與綿密的絕妙結合。', 120],
+        ['flat_croissant.jpg', '韓式扁可頌', '壓扁造型更酥脆，層次分明，創新演繹傳統可頌風味。', 110],
+        ['bento_cake.jpg', '韓式便當小蛋糕', '迷你蛋糕外型可愛，甜而不膩，精緻便當式享受。', 130]
+      ]
+    };
+
+    function renderMenu() {
+      const container = document.getElementById('menu-container');
+      for (const [category, items] of Object.entries(categories)) {
+        const section = document.createElement('section');
+        const title = document.createElement('h2');
+        title.textContent = category;
+        section.appendChild(title);
+
+        const menuDiv = document.createElement('div');
+        menuDiv.className = 'menu';
+
+        items.forEach(([img, name, desc, price]) => {
+          const dish = document.createElement('div');
+          dish.className = 'dish';
+          dish.innerHTML = `
+            <img src="${img}" alt="${name}">
+            <h3>${name}</h3>
+            <p>${desc}</p>
+            <button onclick="addToCart('${name}', ${price})">加入購物車 ($${price})</button>
+          `;
+          menuDiv.appendChild(dish);
+        });
+
+        section.appendChild(menuDiv);
+        container.appendChild(section);
+      }
+    }
+
+    function addToCart(name, price) {
+      if (cart[name]) {
+        cart[name].qty++;
+      } else {
+        cart[name] = { price, qty: 1 };
+      }
+      updateCart();
+    }
+
+    function updateCart() {
+      const list = document.getElementById('cart-list');
+      const total = document.getElementById('total');
+      list.innerHTML = '';
+      let sum = 0;
+      for (const [name, item] of Object.entries(cart)) {
+        const li = document.createElement('li');
+        const itemTotal = item.price * item.qty;
+        li.textContent = `${name} x ${item.qty} - $${itemTotal}`;
+        list.appendChild(li);
+        sum += itemTotal;
+      }
+      total.textContent = `總計：$${sum}`;
+    }
+
+    function checkout() {
+      if (Object.keys(cart).length === 0) {
+        alert('請先選擇餐點');
+        return;
+      }
+      let summary = '您的訂單如下：\n';
+      for (const [name, item] of Object.entries(cart)) {
+        summary += `${name} x ${item.qty} = $${item.qty * item.price}\n`;
+      }
+      summary += document.getElementById('total').textContent;
+      alert(summary);
+    }
+
+    window.onload = renderMenu;
+  </script>
+</body>
+</html>
+
