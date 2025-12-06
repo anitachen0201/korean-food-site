@@ -1,248 +1,529 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <title>歐膩開飯啦</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Noto Sans TC', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #fffaf0;
-      color: #333;
-    }
-    header {
-      background-color: #b22222;
-      color: white;
-      text-align: center;
-      padding: 20px 10px;
-    }
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      margin: 0;
-      font-size: 36px;
-    }
-    header p {
-      margin: 0;
-      font-size: 18px;
-    }
-    main {
-      padding: 20px;
-      text-align: center;
-    }
-    h2 {
-      font-size: 28px;
-      color: #b22222;
-      margin-top: 40px;
-    }
-    .menu {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-    .dish {
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      width: 200px;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .dish img {
-      width: 100%;
-      border-radius: 8px;
-    }
-    .dish h3 {
-      margin: 10px 0 5px;
-      font-size: 18px;
-    }
-    .dish p {
-      font-size: 14px;
-      color: #666;
-    }
-    .dish button {
-      margin-top: 10px;
-      padding: 8px 12px;
-      background-color: #b22222;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    #cart {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 10px;
-      width: 250px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      z-index: 999;
-    }
-    #cart h4 {
-      margin-top: 0;
-    }
-    #cart-list {
-      max-height: 200px;
-      overflow-y: auto;
-      text-align: left;
-    }
-    #checkout-btn {
-      margin-top: 10px;
-      padding: 8px;
-      background-color: #228b22;
-      color: white;
-      border: none;
-      width: 100%;
-      border-radius: 5px;
-    }
-    footer {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-      margin-top: 40px;
-    }
+    <meta charset="UTF-8" />
+    <title>小公主的韓式料理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fffaf0;
+            color: #333;
+        }
+        header {
+            background-color: #b22222;
+            color: white;
+            text-align: center;
+            padding: 20px 10px;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            font-size: 36px;
+        }
+        header p {
+            margin: 0;
+            font-size: 18px;
+        }
+        /* 導覽列樣式 */
+        nav {
+            background-color: #f1f1f1;
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            text-decoration: none;
+            color: #b22222;
+            font-weight: 700;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #ddd;
+        }
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 28px;
+            color: #b22222;
+            margin-top: 40px;
+        }
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .dish {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 200px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .dish img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .dish h3 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
+        .dish p {
+            font-size: 14px;
+            color: #666;
+        }
+        .dish button {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #b22222;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            width: 250px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        #cart h4 {
+            margin-top: 0;
+        }
+        #cart-list {
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        #cart-list li {
+            margin-bottom: 5px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* 購物車結帳按鈕樣式優化 */
+        #checkout-btn {
+            margin-top: 10px;
+            padding: 10px; 
+            background: linear-gradient(180deg, #228b22 0%, #1a6f1a 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #145614;
+            transition: all 0.1s ease;
+        }
+        #checkout-btn:hover {
+            background: linear-gradient(180deg, #28a028 0%, #1a6f1a 100%);
+            box-shadow: 0 3px 0 #145614;
+            transform: translateY(1px);
+        }
+        #checkout-btn:active {
+            box-shadow: 0 0 0 #145614;
+            transform: translateY(4px);
+        }
+        /* END 購物車結帳按鈕樣式優化 */
 
-    /* ✅ 手機版購物車調整 */
-    @media (max-width: 600px) {
-      #cart {
-        width: 90%;
-        right: 5%;
-        left: 5%;
-        top: auto;
-        bottom: 20px;
-        border-radius: 16px;
-      }
-    }
-  </style>
+
+        /* 訂位區塊樣式 */
+        #booking-section {
+            margin-bottom: 40px; 
+            padding: 40px 20px; 
+            background-color: #fcecec; 
+            border-radius: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .booking-btn {
+            display: inline-block; 
+            padding: 15px 30px; 
+            background-color: #228b22; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* 結帳畫面 Modal 樣式 (精緻化) */
+        #checkout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            text-align: left;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.4s ease-out;
+            border: 3px solid #b22222;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-content h3 {
+            color: #b22222;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            border-bottom: 3px double #b22222;
+            padding-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .modal-content h4 {
+            color: #333;
+            font-size: 18px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+        #order-summary {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        #order-summary li {
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        #order-summary .item-name {
+            flex: 2;
+        }
+        #order-summary .item-price {
+            flex: 1;
+            text-align: right;
+            font-weight: 600;
+        }
+        #order-total {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: right;
+            padding-top: 10px;
+            border-top: 2px solid #b22222;
+            color: #b22222;
+        }
+        
+        /* 繼續點餐按鈕樣式優化 */
+        #continue-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 30px;
+            background: linear-gradient(180deg, #b22222 0%, #8b1a1a 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 19px;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #701414;
+            transition: all 0.1s ease;
+        }
+        #continue-btn:hover {
+            background: linear-gradient(180deg, #cc2727 0%, #8b1a1a 100%);
+            box-shadow: 0 3px 0 #701414;
+            transform: translateY(1px);
+        }
+        #continue-btn:active {
+            box-shadow: 0 0 0 #701414;
+            transform: translateY(4px);
+        }
+        /* END 繼續點餐按鈕樣式優化 */
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>小公主的韓式料理</h1>
-    <p>帶給您正宗的韓式美食體驗</p>
-  </header>
+    <header>
+        <h1>小公主的韓式料理</h1>
+        <p>帶給您正宗的韓式美食體驗</p>
+    </header>
 
-  <div id="cart">
-    <h4>購物車</h4>
-    <ul id="cart-list"></ul>
-    <p id="total">總計：$0</p>
-    <button id="checkout-btn" onclick="checkout()">結帳</button>
-  </div>
+    <nav>
+        <a href="#booking-section">📝 線上訂位</a>
+        <a href="#menu-list">🍜 點餐菜單</a>
+        <a href="#cart-location">🛒 購物車</a>
+    </nav>
 
-  <main id="menu-container"></main>
+    <div id="cart">
+        <a id="cart-location" style="visibility: hidden; position: absolute; top: -50px;"></a>
+        <h4>購物車 🛒</h4>
+        <ul id="cart-list">
+            </ul>
+        <p id="total">總計：$0</p>
+        <button id="checkout-btn" onclick="checkout()">立即結帳</button> 
+    </div>
 
-  <footer>
-    <p>地址：新北市淡水區新民街180巷123號1樓</p>
-    <p>聯絡我們：anita.chen0201@gmail.com</p>
-  </footer>
+    <main id="menu-container">
+        <section id="booking-section">
+            <h2>📝 線上訂位</h2>
+            <p>為您保留最佳用餐位置！請點擊下方按鈕前往我們的專屬訂位系統。</p>
+            <a href="https://example.com/reservation" target="_blank" class="booking-btn">
+                立即線上預約桌位
+            </a>
+            <p style="margin-top: 15px; font-size: 14px; color: #b22222;">(將導向外部訂位系統)</p>
+        </section>
 
-  <script>
-    const cart = {};
+        <div id="menu-list"></div>
+    </main>
 
-    const categories = {
-      '人氣料理推薦': [
-        ['kimchi.jpg', '泡菜鍋', '酸辣濃郁，暖胃必吃！', 250],
-        ['bibimbap.jpg', '石鍋拌飯', '新鮮蔬菜與香濃拌醬的完美結合。', 220],
-        ['tteokbokk.jpg', '辣炒年糕', '甜辣口感，讓人回味無窮。', 180],
-        ['soondubu.jpg', '韓式豆腐鍋', '濃郁湯底，溫暖人心的家常好味道。', 230],
-        ['kor_budaejjigae_main.jpg', '韓式部隊鍋', '香濃韓式火鍋，滿滿熱騰騰料。', 280],
-        ['seafood_hotpot_kor.jpg', '韓式海鮮鍋', '鮮美海鮮湯，盡享大海滋味。', 260],
-        ['kor_blackbean_noodle.jpg', '韓式炸醬麵', '濃郁黑醬麵，完美融合甜鹹。', 190],
-        ['korean_gimbap.jpg', '韓式飯捲', '濃郁湯底，溫暖人心的家常好味道。', 160]
-      ],
-      '配菜': [
-        ['kimchi_pancake.jpg', '泡菜煎餅', '酸辣爽口，香脆可口的經典韓式煎餅。', 200],
-        ['seafood_pancake.jpg', '海鮮煎餅', '滿滿海味，外酥內嫩的韓式美味。', 220],
-        ['yangnyeom_chicken.jpg', '韓式洋釀炸雞', '甜辣醬汁裹滿，每口都香濃過癮。', 240],
-        ['honey_chicken.jpg', '韓式蜂蜜炸雞', '濃郁蜂蜜香，甜滋滋的炸雞享受。', 240]
-      ],
-      '飲料': [
-        ['yuzu_tea.jpg', '韓式柚子茶', '清新甘甜，帶有柚子的香氣與果肉。', 90],
-        ['strawberry_milk.jpg', '草莓牛奶', '甜美草莓融入濃醇牛奶，香濃可口。', 80],
-        ['banana_milk.jpg', '香蕉牛奶', '韓國經典，濃郁香甜的香蕉風味。', 80],
-        ['calpis_drink.jpg', '可爾必思', '酸甜清爽，最具人氣的韓式飲品。', 70]
-      ],
-      '甜點': [
-        ['yuzu_mochi.jpg', '韓式柚子大福', '柚香濃郁，Q彈外皮包裹果香滿溢的內餡。', 100],
-        ['dalgona_ice_cream.jpg', '韓式椪糖霜淇淋', '經典椪糖搭配濃滑霜淇淋，酥脆與綿密的絕妙結合。', 120],
-        ['flat_croissant.jpg', '韓式扁可頌', '壓扁造型更酥脆，層次分明，創新演繹傳統可頌風味。', 110],
-        ['bento_cake.jpg', '韓式便當小蛋糕', '迷你蛋糕外型可愛，甜而不膩，精緻便當式享受。', 130]
-      ]
-    };
+    <footer>
+        <p>地址：新北市淡水區新民街180巷123號1樓</p>
+        <p>聯絡我們：anita.chen0201@gmail.com</p>
+    </footer>
 
-    function renderMenu() {
-      const container = document.getElementById('menu-container');
-      for (const [category, items] of Object.entries(categories)) {
-        const section = document.createElement('section');
-        const title = document.createElement('h2');
-        title.textContent = category;
-        section.appendChild(title);
+    <div id="checkout-modal">
+        <div class="modal-content">
+            <h3>感謝您的訂購！</h3>
+            <p style="text-align: center; font-style: italic; color: #666;">我們已將訂單送出，稍後為您準備。</p>
+            <hr>
+            <h4>訂單摘要：</h4>
+            <ul id="order-summary"></ul>
+            <p id="order-total">最終總計：$0</p>
+            <button id="continue-btn" onclick="continueOrdering()">繼續點餐</button> 
+        </div>
+    </div>
 
-        const menuDiv = document.createElement('div');
-        menuDiv.className = 'menu';
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+      // ✅ Public Key 已更新為 9IpHY4bm1ftOnH-TB
+      (function() {
+        emailjs.init("9IpHY4bm1ftOnH-TB"); 
+      })();
+    </script>
+    
+    <script>
+        const cart = {};
 
-        items.forEach(([img, name, desc, price]) => {
-          const dish = document.createElement('div');
-          dish.className = 'dish';
-          dish.innerHTML = `
-            <img src="${img}" alt="${name}">
-            <h3>${name}</h3>
-            <p>${desc}</p>
-            <button onclick="addToCart('${name}', ${price})">加入購物車 ($${price})</button>
-          `;
-          menuDiv.appendChild(dish);
-        });
+        const categories = {
+            '人氣料理推薦': [
+                ['kimchi.jpg', '泡菜鍋', '酸辣濃郁，暖胃必吃！', 250],
+                ['bibimbap.jpg', '石鍋拌飯', '新鮮蔬菜與香濃拌醬的完美結合。', 220],
+                ['tteokbokk.jpg', '辣炒年糕', '甜辣口感，讓人回味無窮。', 180],
+                ['soondubu.jpg', '韓式豆腐鍋', '濃郁湯底，溫暖人心的家常好味道。', 230],
+                ['kor_budaejjigae_main.jpg', '韓式部隊鍋', '香濃韓式火鍋，滿滿熱騰騰料。', 280],
+                ['seafood_hotpot_kor.jpg', '韓式海鮮鍋', '鮮美海鮮湯，盡享大海滋味。', 260],
+                ['kor_blackbean_noodle.jpg', '韓式炸醬麵', '濃郁黑醬麵，完美融合甜鹹。', 190],
+                ['korean_gimbap.jpg', '韓式飯捲', '濃郁湯底，溫暖人心的家常好味道。', 160]
+            ],
+            '配菜': [
+                ['kimchi_pancake.jpg', '泡菜煎餅', '酸辣爽口，香脆可口的經典韓式煎餅。', 200],
+                ['seafood_pancake.jpg', '海鮮煎餅', '滿滿海味，外酥內嫩的韓式美味。', 220],
+                ['yangnyeom_chicken.jpg', '韓式洋釀炸雞', '甜辣醬汁裹滿，每口都香濃過癮。', 240],
+                ['honey_chicken.jpg', '韓式蜂蜜炸雞', '濃郁蜂蜜香，甜滋滋的炸雞享受。', 240]
+            ],
+            '飲料': [
+                ['yuzu_tea.jpg', '韓式柚子茶', '清新甘甜，帶有柚子的香氣與果肉。', 90],
+                ['strawberry_milk.jpg', '草莓牛奶', '甜美草莓融入濃醇牛奶，香濃可口。', 80],
+                ['banana_milk.jpg', '香蕉牛奶', '韓國經典，濃郁香甜的香蕉風味。', 80],
+                ['calpis_drink.jpg', '可爾必思', '酸甜清爽，最具人氣的韓式飲品。', 70]
+            ],
+            '甜點': [
+                ['yuzu_mochi.jpg', '韓式柚子大福', '柚香濃郁，Q彈外皮包裹果香滿溢的內餡。', 100],
+                ['dalgona_ice_cream.jpg', '韓式椪糖霜淇淋', '經典椪糖搭配濃滑霜淇淋，酥脆與綿密的絕妙結合。', 120],
+                ['flat_croissant.jpg', '韓式扁可頌', '壓扁造型更酥脆，層次分明，創新演繹傳統可頌風味。', 110],
+                ['bento_cake.jpg', '韓式便當小蛋糕', '迷你蛋糕外型可愛，甜而不膩，精緻便當式享受。', 130]
+            ]
+        };
 
-        section.appendChild(menuDiv);
-        container.appendChild(section);
-      }
-    }
+        function renderMenu() {
+            const container = document.getElementById('menu-list'); 
+            for (const [category, items] of Object.entries(categories)) {
+                const section = document.createElement('section');
+                const title = document.createElement('h2');
+                title.textContent = category;
+                section.appendChild(title);
 
-    function addToCart(name, price) {
-      if (cart[name]) {
-        cart[name].qty++;
-      } else {
-        cart[name] = { price, qty: 1 };
-      }
-      updateCart();
-    }
+                const menuDiv = document.createElement('div');
+                menuDiv.className = 'menu';
 
-    function updateCart() {
-      const list = document.getElementById('cart-list');
-      const total = document.getElementById('total');
-      list.innerHTML = '';
-      let sum = 0;
-      for (const [name, item] of Object.entries(cart)) {
-        const li = document.createElement('li');
-        const itemTotal = item.price * item.qty;
-        li.textContent = `${name} x ${item.qty} - $${itemTotal}`;
-        list.appendChild(li);
-        sum += itemTotal;
-      }
-      total.textContent = `總計：$${sum}`;
-    }
+                items.forEach(([img, name, desc, price]) => {
+                    const dish = document.createElement('div');
+                    dish.className = 'dish';
+                    dish.innerHTML = `
+                        <img src="${img}" alt="${name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/200?text=${name}'">
+                        <h3>${name}</h3>
+                        <p>${desc}</p>
+                        <button onclick="addToCart('${name}', ${price})">加入購物車 ($${price})</button>
+                    `;
+                    menuDiv.appendChild(dish);
+                });
 
-    function checkout() {
-      if (Object.keys(cart).length === 0) {
-        alert('請先選擇餐點');
-        return;
-      }
-      let summary = '您的訂單如下：\n';
-      for (const [name, item] of Object.entries(cart)) {
-        summary += `${name} x ${item.qty} = $${item.qty * item.price}\n`;
-      }
-      summary += document.getElementById('total').textContent;
-      alert(summary);
-    }
+                section.appendChild(menuDiv);
+                container.appendChild(section);
+            }
+        }
 
-    window.onload = renderMenu;
-  </script>
+        function addToCart(name, price) {
+            if (cart[name]) {
+                cart[name].qty++;
+            } else {
+                cart[name] = { price, qty: 1 };
+            }
+            updateCart();
+        }
+
+        // 更新購物車列表，加入刪除按鈕
+        function updateCart() {
+            const list = document.getElementById('cart-list');
+            const total = document.getElementById('total');
+            list.innerHTML = '';
+            let sum = 0;
+            for (const [name, item] of Object.entries(cart)) {
+                const li = document.createElement('li');
+                const itemTotal = item.price * item.qty;
+                
+                // 創建顯示品項和價格的文字
+                const itemText = document.createElement('span');
+                itemText.textContent = `${name} x ${item.qty} - $${itemTotal}`;
+                li.appendChild(itemText);
+
+                // 創建刪除按鈕
+                const deleteBtn = document.createElement('span');
+                deleteBtn.textContent = ' ❌'; 
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.style.color = '#b22222'; 
+                deleteBtn.title = `移除所有 ${name}`;
+                
+                // 綁定移除函式
+                deleteBtn.onclick = function() {
+                    removeFromCart(name);
+                };
+                
+                li.appendChild(deleteBtn);
+                list.appendChild(li);
+                sum += itemTotal;
+            }
+            total.textContent = `總計：$${sum}`;
+        }
+        
+        // 移除品項的函式
+        function removeFromCart(name) {
+            if (cart[name]) {
+                delete cart[name]; // 從 cart 物件中完全刪除該品項
+                updateCart(); // 重新渲染購物車
+            }
+        }
+
+        // 輔助函式：顯示結帳成功 Modal (已精緻化)
+        function displayCheckoutModal(sum) {
+            const modal = document.getElementById('checkout-modal');
+            const summaryList = document.getElementById('order-summary');
+            const totalDisplay = document.getElementById('order-total');
+            
+            summaryList.innerHTML = ''; 
+            
+            // 遍歷購物車，創建精緻化列表
+            for (const [name, item] of Object.entries(cart)) {
+                const itemTotal = item.price * item.qty;
+                const li = document.createElement('li');
+                
+                // 使用 span 標籤並賦予 class，以便 CSS 精確控制排版
+                li.innerHTML = `
+                    <span class="item-name">${name} (x${item.qty})</span>
+                    <span class="item-price">$${itemTotal}</span>
+                `;
+                summaryList.appendChild(li);
+            }
+
+            totalDisplay.textContent = `最終總計：$${sum}`;
+
+            modal.style.display = 'flex';
+        }
+
+        // 核心函式：結帳與發送 Email
+        function checkout() {
+            if (Object.keys(cart).length === 0) {
+                alert('請先選擇餐點');
+                return;
+            }
+
+            let sum = 0;
+            let orderDetailsText = ''; 
+
+            for (const [name, item] of Object.entries(cart)) {
+                const itemTotal = item.price * item.qty;
+                orderDetailsText += `${name} x ${item.qty} = $${itemTotal}\n`;
+                sum += itemTotal;
+            }
+
+            // --- EmailJS 發送郵件邏輯 ---
+            const templateParams = {
+                order_details: orderDetailsText, 
+                total_amount: sum, 
+                shop_email: 'anita.chen0201@gmail.com', 
+                order_time: new Date().toLocaleString('zh-TW'),
+            };
+
+            // ✅ Service ID: service_ezl82r4
+            // ✅ Template ID: template_qa3uc6r
+            emailjs.send('service_ezl82r4', 'template_qa3uc6r', templateParams)
+                .then(() => {
+                   displayCheckoutModal(sum); 
+                }, (error) => {
+                   console.error('訂單郵件發送失敗:', error);
+                   displayCheckoutModal(sum); 
+                   alert('系統發生錯誤，訂單郵件可能發送失敗，請手動確認。');
+                });
+        }
+
+        function continueOrdering() {
+            document.getElementById('checkout-modal').style.display = 'none';
+            for (const key in cart) {
+                delete cart[key];
+            }
+            updateCart();
+            window.scrollTo(0, 0); 
+        }
+
+        window.onload = renderMenu;
+    </script>
 </body>
 </html>
 
