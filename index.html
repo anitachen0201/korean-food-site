@@ -2,10 +2,11 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8" />
-    <title>歐膩開飯啦韓式餐館</title>
+    <title>歐膩開飯啦韓式餐館 - 線上點餐</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
     <style>
+        /* --- 全域樣式 (維持不變) --- */
         body {
             font-family: 'Noto Sans TC', sans-serif;
             margin: 0;
@@ -28,7 +29,6 @@
             margin: 0;
             font-size: 18px;
         }
-        /* 導覽列樣式 */
         nav {
             background-color: #f1f1f1;
             padding: 10px 0;
@@ -47,15 +47,11 @@
         nav a:hover {
             background-color: #ddd;
         }
-        
-        /* main 區塊增加底部間距，防止內容被購物車 Bar 遮住 */
         main {
             padding: 20px;
             text-align: center;
-            /* 增加底部邊距，確保不會被購物車Bar遮擋 */
             padding-bottom: 120px; 
         }
-
         h2 {
             font-size: 28px;
             color: #b22222;
@@ -97,36 +93,28 @@
             cursor: pointer;
         }
 
-        /* ************************************** */
-        /* 購物車樣式：固定在右下角，預設收合 */
-        /* ************************************** */
+        /* --- 購物車樣式 (保留結構，移除客戶資訊區塊) --- */
         #cart {
             position: fixed;
-            bottom: 0;           /* 固定在底部 */
-            right: 20px;         /* 靠右邊 */
-            width: 90%;          /* 預設寬度 (手機) */
-            max-width: 400px;    /* 桌面版最大寬度 */
+            bottom: 0;           
+            right: 20px;         
+            width: 90%;          
+            max-width: 400px;    
             background-color: #fff;
             border: 1px solid #b22222; 
             padding: 10px;
-            border-radius: 10px 10px 0 0; /* 底部 Bar 圓角 */
+            border-radius: 10px 10px 0 0; 
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;      
-            max-height: 50px;    /* 預設高度縮小為一個 Bar */
+            max-height: 50px;    
             overflow: hidden;   
-            /* 過渡效果讓展開/收合更平滑 */
-            transition: max-height 0.3s ease-in-out, width 0.3s ease-in-out, bottom 0.3s ease-in-out; 
+            transition: max-height 0.3s ease-in-out; 
             text-align: left;
         }
         
-        /* 展開購物車的樣式 */
         #cart.expanded {
-            max-height: 80vh; /* 展開時佔據螢幕約一半高度 */
-            width: 90%;
-            max-width: 400px;
+            max-height: 80vh; /* 展開高度 */
         }
-
-        /* 購物車標題 (點擊 Bar) - 包含即時總計 */
         #cart h4 {
             margin: 0;
             cursor: pointer;
@@ -136,38 +124,18 @@
             font-size: 20px;
             color: #b22222;
         }
-
-        /* 購物車列表、總計和按鈕的樣式調整 */
-        #cart-list, #total, #checkout-btn, #customer-info {
-            display: none; /* 預設在收合狀態下隱藏 */
+        /* 展開狀態下顯示列表和按鈕 */
+        #cart-list, #total, #checkout-btn {
+            display: none; 
         }
-        
-        /* 在展開狀態下顯示 */
-        #cart.expanded #cart-list, #cart.expanded #total, #cart.expanded #checkout-btn, #cart.expanded #customer-info {
+        #cart.expanded #cart-list, #cart.expanded #total, #cart.expanded #checkout-btn {
             display: block; 
         }
-
-        /* 顧客資訊欄位 */
-        #customer-info input, #customer-info textarea {
-            display: block;
-            width: calc(100% - 12px); /* 100% 減去 padding */
-            padding: 5px;
-            margin-bottom: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box; /* 確保 padding 不會增加寬度 */
-        }
-        #customer-info textarea {
-            resize: vertical;
-        }
-
-
-        /* 購物車列表的樣式調整 */
         #cart-list {
             list-style-type: none;
             padding-left: 0;
             margin-top: 10px;
-            max-height: calc(80vh - 180px); /* 確保列表在展開狀態下可以捲動，並為表單留出空間 */
+            max-height: calc(80vh - 120px); /* 列表高度增大 */
             overflow-y: auto;
         }
         #cart-list li {
@@ -178,12 +146,31 @@
             justify-content: space-between;
             align-items: center;
         }
-        /* ************************************** */
-        /* END 購物車樣式 */
-        /* ************************************** */
 
 
-        /* 購物車結帳按鈕樣式優化 */
+        /* --- 訂位按鈕樣式 (維持不變) --- */
+        #booking-section {
+            margin-bottom: 40px; 
+            padding: 40px 20px; 
+            background-color: #fcecec; 
+            border-radius: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .booking-btn {
+            display: inline-block; 
+            padding: 15px 30px; 
+            background-color: #228b22; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- 結帳按鈕 (維持不變) --- */
         #checkout-btn {
             margin-top: 10px;
             padding: 10px; 
@@ -207,29 +194,8 @@
             box-shadow: 0 0 0 #145614;
             transform: translateY(4px);
         }
-
-        /* 訂位區塊樣式 */
-        #booking-section {
-            margin-bottom: 40px; 
-            padding: 40px 20px; 
-            background-color: #fcecec; 
-            border-radius: 10px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .booking-btn {
-            display: inline-block; 
-            padding: 15px 30px; 
-            background-color: #228b22; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 8px; 
-            font-size: 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        /* 結帳畫面 Modal 樣式 (精緻化) */
+        
+        /* --- Modal 樣式 (維持不變) --- */
         #checkout-modal {
             position: fixed;
             top: 0;
@@ -240,7 +206,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 10000; /* 確保在最上層 */
+            z-index: 10000; 
         }
         .modal-content {
             background-color: #ffffff;
@@ -250,29 +216,24 @@
             max-width: 450px;
             text-align: left;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.4s ease-out;
             border: 3px solid #b22222;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
         .modal-content h3 {
-            color: #b22222;
-            text-align: center;
-            font-size: 26px;
-            font-weight: 700;
-            border-bottom: 3px double #b22222;
-            padding-bottom: 15px;
-            margin-top: 0;
-            margin-bottom: 20px;
+             color: #b22222;
+             text-align: center;
+             font-size: 26px;
+             font-weight: 700;
+             border-bottom: 3px double #b22222;
+             padding-bottom: 15px;
+             margin-top: 0;
+             margin-bottom: 20px;
         }
         .modal-content h4 {
-            color: #333;
-            font-size: 18px;
-            border-bottom: 1px dashed #ccc;
-            padding-bottom: 5px;
-            margin-top: 25px;
+             color: #333;
+             font-size: 18px;
+             border-bottom: 1px dashed #ccc;
+             padding-bottom: 5px;
+             margin-top: 25px;
         }
         #order-summary {
             list-style-type: none;
@@ -281,28 +242,26 @@
             font-size: 15px;
         }
         #order-summary li {
-            padding: 8px 0;
-            display: flex;
-            justify-content: space-between;
+             padding: 8px 0;
+             display: flex;
+             justify-content: space-between;
         }
         #order-summary .item-name {
-            flex: 2;
+             flex: 2;
         }
         #order-summary .item-price {
-            flex: 1;
-            text-align: right;
-            font-weight: 600;
+             flex: 1;
+             text-align: right;
+             font-weight: 600;
         }
         #order-total {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: right;
-            padding-top: 10px;
-            border-top: 2px solid #b22222;
-            color: #b22222;
+             font-size: 24px;
+             font-weight: bold;
+             text-align: right;
+             padding-top: 10px;
+             border-top: 2px solid #b22222;
+             color: #b22222;
         }
-        
-        /* 繼續點餐按鈕樣式優化 */
         #continue-btn {
             display: block;
             width: 100%;
@@ -327,13 +286,10 @@
             box-shadow: 0 0 0 #701414;
             transform: translateY(4px);
         }
-
-        /* Footer 樣式調整以應對底部購物車 */
         footer {
             background-color: #333;
             color: white;
             text-align: center;
-            /* 調整 padding-bottom 給購物車留出空間 */
             padding: 10px 0 70px 0; 
             margin-top: 40px;
             font-size: 14px;
@@ -361,11 +317,6 @@
             <span>購物車 🛒</span>
             <span id="cart-summary-text"> (總計：$0) </span>
         </h4>
-
-        <div id="customer-info" style="margin-top: 10px;">
-            <input type="text" id="customer-name" placeholder="您的姓名 (必填)" required>
-            <textarea id="order-remarks" placeholder="訂單備註 (例如：少冰、不加香菜)" rows="2"></textarea>
-        </div>
         
         <ul id="cart-list">
             </ul>
@@ -398,7 +349,10 @@
             <h3>感謝您的訂購！</h3>
             <p style="text-align: center; font-style: italic; color: #666;">我們已將訂單送出，稍後為您準備。</p>
             <hr>
-            <div id="modal-customer-info"></div>
+            <div id="modal-customer-info">
+                 <p style="color: #b22222; font-weight: bold; text-align: center;">此為快速點餐，請留意服務人員將不會致電確認。</p>
+                 <hr style="margin-top: 15px;">
+            </div>
             
             <h4>訂單摘要：</h4>
             <ul id="order-summary"></ul>
@@ -409,7 +363,6 @@
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
-      // ✅ Public Key 已更新為 9IpHY4bm1ftOnH-TB
       (function() {
         emailjs.init("9IpHY4bm1ftOnH-TB"); 
       })();
@@ -419,7 +372,7 @@
         const cart = {};
         let total = 0; 
 
-        // 菜單資料 (略)
+        // 菜單資料 (維持不變)
         const categories = {
             '人氣料理推薦': [
                 ['kimchi.jpg', '泡菜鍋', '酸辣濃郁，暖胃必吃！', 250],
@@ -451,7 +404,7 @@
             ]
         };
 
-        // 渲染菜單的函式 (略)
+        // 渲染菜單的函式 (維持不變)
         function renderMenu() {
             const menuList = document.getElementById('menu-list');
             menuList.innerHTML = ''; 
@@ -483,7 +436,7 @@
             }
         }
 
-        // 加入購物車函式 (略)
+        // 加入、移除、減少購物車函式 (維持不變)
         function addToCart(name, price) {
             if (cart[name]) {
                 cart[name].qty++;
@@ -493,7 +446,6 @@
             updateCartDisplay();
         }
 
-        // 移除購物車品項的函式 (略)
         function removeFromCart(name) {
             if (cart[name]) {
                 delete cart[name]; 
@@ -501,7 +453,6 @@
             }
         }
 
-        // 減少購物車數量函式 (略)
         function decreaseQuantity(name) {
             if (cart[name] && cart[name].qty > 1) {
                 cart[name].qty--;
@@ -511,7 +462,7 @@
             updateCartDisplay();
         }
         
-        // 更新購物車顯示函式 (略)
+        // 更新購物車顯示函式 (維持不變)
         function updateCartDisplay() {
             const cartList = document.getElementById('cart-list');
             const totalElement = document.getElementById('total');
@@ -537,33 +488,23 @@
             }
 
             totalElement.textContent = `總計：$${total}`;
-            // 更新 Bar 上的即時總計
             summaryText.textContent = total > 0 ? ` (總計：$${total})` : ` (總計：$0)`;
         }
 
-        // 切換購物車展開/收合 (略)
+        // 切換購物車展開/收合 (維持不變)
         function toggleCart() {
             const cartElement = document.getElementById('cart');
             cartElement.classList.toggle('expanded');
         }
-
-        // 輔助函式：顯示結帳成功 Modal (已更新，接收姓名和備註)
-        function displayCheckoutModal(sum, customerName, remarks) {
+        
+        // 輔助函式：顯示結帳成功 Modal (已簡化)
+        function displayCheckoutModal(sum) {
             const modal = document.getElementById('checkout-modal');
             const summaryList = document.getElementById('order-summary');
             const totalDisplay = document.getElementById('order-total');
-            const infoDiv = document.getElementById('modal-customer-info'); // 取得顧客資訊顯示區
-
-            summaryList.innerHTML = ''; 
             
-            // 顯示顧客姓名和備註
-            infoDiv.innerHTML = `
-                <p><strong>顧客姓名:</strong> ${customerName}</p>
-                <p><strong>訂單備註:</strong> ${remarks || '無'}</p>
-                <hr style="margin-top: 15px;">
-            `;
+            summaryList.innerHTML = ''; 
 
-            // 遍歷購物車，創建精緻化列表
             for (const [name, item] of Object.entries(cart)) {
                 const itemTotal = item.price * item.qty;
                 const li = document.createElement('li');
@@ -579,33 +520,28 @@
             modal.style.display = 'flex';
         }
 
-        // 核心函式：結帳與發送 Email (已更新，包含姓名和備註)
+        // 核心函式：結帳與發送 Email (已簡化，不處理顧客資訊驗證和傳遞)
         function checkout() {
-            const customerName = document.getElementById('customer-name').value.trim();
-            const remarks = document.getElementById('order-remarks').value.trim();
-            
             // 1. 驗證
             if (total === 0) {
                 alert('請先選擇餐點');
                 return;
             }
-            if (!customerName) {
-                alert('請輸入您的姓名以完成訂購');
-                return;
-            }
 
             let orderDetailsText = ''; 
             let sum = total; 
+            const customerName = '無姓名 (快速點餐)'; // 預設姓名
+            const remarks = '無備註 (快速點餐)';       // 預設備註
 
             for (const [name, item] of Object.entries(cart)) {
                 const itemTotal = item.price * item.qty;
                 orderDetailsText += `${name} x ${item.qty} = $${itemTotal}\n`;
             }
             
-            // 將姓名和備註也加入到郵件內容中
+            // 組合發送郵件的資訊
             orderDetailsText += `--- 顧客資訊 ---\n`;
             orderDetailsText += `顧客姓名: ${customerName}\n`;
-            orderDetailsText += `訂單備註: ${remarks || '無備註'}\n`;
+            orderDetailsText += `訂單備註: ${remarks}\n`;
 
             // --- EmailJS 發送郵件邏輯 ---
             const templateParams = {
@@ -613,40 +549,35 @@
                 total_amount: sum, 
                 shop_email: 'anita.chen0201@gmail.com', 
                 order_time: new Date().toLocaleString('zh-TW'),
-                // 額外傳遞姓名和備註 (如果您的 Email 模板有專門的欄位，這會更有用)
                 customer_name: customerName,
-                customer_remarks: remarks || '無備註'
+                customer_remarks: remarks
             };
 
-            // 使用您提供的 Service ID 和 Template ID
             emailjs.send('service_ezl82r4', 'template_qa3uc6r', templateParams)
                 .then(() => {
-                   // 傳遞姓名和備註給 Modal 顯示
-                   displayCheckoutModal(sum, customerName, remarks); 
+                   // 顯示 Modal (不再傳遞姓名和備註)
+                   displayCheckoutModal(sum); 
                 }, (error) => {
                    console.error('訂單郵件發送失敗:', error);
                    // 即使發送失敗，也先顯示 Modal 讓使用者知道訂單資訊
-                   displayCheckoutModal(sum, customerName, remarks); 
+                   displayCheckoutModal(sum); 
                    alert('系統發生錯誤，訂單郵件可能發送失敗，請手動確認。');
                 });
         }
 
-        // 繼續點餐（關閉 Modal 並清空購物車）(已更新：清空備註欄位)
+        // 繼續點餐（關閉 Modal 並清空購物車）(已簡化)
         function continueOrdering() {
             document.getElementById('checkout-modal').style.display = 'none';
             // 清空購物車
             for (const key in cart) {
                 delete cart[key];
             }
-            // 清空姓名和備註欄位
-            document.getElementById('customer-name').value = '';
-            document.getElementById('order-remarks').value = '';
-
+            
             updateCartDisplay();
             window.scrollTo(0, 0); 
         }
 
-        // 網頁加載時執行 (略)
+        // 網頁加載時執行 (維持不變)
         window.onload = function() {
             renderMenu();
         };
