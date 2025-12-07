@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8" />
-    <title>小公主的韓式料理</title>
+    <title>歐膩開飯啦韓式餐館</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
     <style>
@@ -47,10 +47,15 @@
         nav a:hover {
             background-color: #ddd;
         }
+        
+        /* main 區塊增加底部間距，防止內容被購物車 Bar 遮住 */
         main {
             padding: 20px;
             text-align: center;
+            /* 增加底部邊距，確保不會被購物車Bar遮擋 */
+            padding-bottom: 120px; 
         }
+
         h2 {
             font-size: 28px;
             color: #b22222;
@@ -91,27 +96,79 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        /* ************************************** */
+        /* 購物車樣式：固定在右下角，預設收合 */
+        /* ************************************** */
         #cart {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            bottom: 0;           /* 固定在底部 */
+            right: 20px;         /* 靠右邊 */
+            width: 90%;          /* 預設寬度 (手機) */
+            max-width: 400px;    /* 桌面版最大寬度 */
             background-color: #fff;
-            border: 1px solid #ddd;
+            border: 1px solid #b22222; 
             padding: 10px;
-            border-radius: 10px;
-            width: 250px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-        #cart h4 {
-            margin-top: 0;
-        }
-        #cart-list {
-            max-height: 200px;
-            overflow-y: auto;
+            border-radius: 10px 10px 0 0; /* 底部 Bar 圓角 */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;      
+            max-height: 50px;    /* 預設高度縮小為一個 Bar */
+            overflow: hidden;   
+            /* 過渡效果讓展開/收合更平滑 */
+            transition: max-height 0.3s ease-in-out, width 0.3s ease-in-out, bottom 0.3s ease-in-out; 
             text-align: left;
+        }
+        
+        /* 展開購物車的樣式 */
+        #cart.expanded {
+            max-height: 80vh; /* 展開時佔據螢幕約一半高度 */
+            width: 90%;
+            max-width: 400px;
+        }
+
+        /* 購物車標題 (點擊 Bar) - 包含即時總計 */
+        #cart h4 {
+            margin: 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            color: #b22222;
+        }
+
+        /* 購物車列表、總計和按鈕的樣式調整 */
+        #cart-list, #total, #checkout-btn, #customer-info {
+            display: none; /* 預設在收合狀態下隱藏 */
+        }
+        
+        /* 在展開狀態下顯示 */
+        #cart.expanded #cart-list, #cart.expanded #total, #cart.expanded #checkout-btn, #cart.expanded #customer-info {
+            display: block; 
+        }
+
+        /* 顧客資訊欄位 */
+        #customer-info input, #customer-info textarea {
+            display: block;
+            width: calc(100% - 12px); /* 100% 減去 padding */
+            padding: 5px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* 確保 padding 不會增加寬度 */
+        }
+        #customer-info textarea {
+            resize: vertical;
+        }
+
+
+        /* 購物車列表的樣式調整 */
+        #cart-list {
             list-style-type: none;
             padding-left: 0;
+            margin-top: 10px;
+            max-height: calc(80vh - 180px); /* 確保列表在展開狀態下可以捲動，並為表單留出空間 */
+            overflow-y: auto;
         }
         #cart-list li {
             margin-bottom: 5px;
@@ -121,7 +178,11 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+        /* ************************************** */
+        /* END 購物車樣式 */
+        /* ************************************** */
+
+
         /* 購物車結帳按鈕樣式優化 */
         #checkout-btn {
             margin-top: 10px;
@@ -146,8 +207,6 @@
             box-shadow: 0 0 0 #145614;
             transform: translateY(4px);
         }
-        /* END 購物車結帳按鈕樣式優化 */
-
 
         /* 訂位區塊樣式 */
         #booking-section {
@@ -181,7 +240,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 10000; /* 確保在最上層 */
         }
         .modal-content {
             background-color: #ffffff;
@@ -268,20 +327,24 @@
             box-shadow: 0 0 0 #701414;
             transform: translateY(4px);
         }
-        /* END 繼續點餐按鈕樣式優化 */
 
+        /* Footer 樣式調整以應對底部購物車 */
         footer {
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 10px 0;
+            /* 調整 padding-bottom 給購物車留出空間 */
+            padding: 10px 0 70px 0; 
             margin-top: 40px;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>小公主的韓式料理</h1>
+        <h1>歐膩開飯啦韓式餐館</h1>
         <p>帶給您正宗的韓式美食體驗</p>
     </header>
 
@@ -291,23 +354,35 @@
         <a href="#cart-location">🛒 購物車</a>
     </nav>
 
-    <div id="cart">
+    <div id="cart" onclick="toggleCart()">
         <a id="cart-location" style="visibility: hidden; position: absolute; top: -50px;"></a>
-        <h4>購物車 🛒</h4>
+        
+        <h4>
+            <span>購物車 🛒</span>
+            <span id="cart-summary-text"> (總計：$0) </span>
+        </h4>
+
+        <div id="customer-info" style="margin-top: 10px;">
+            <input type="text" id="customer-name" placeholder="您的姓名 (必填)" required>
+            <textarea id="order-remarks" placeholder="訂單備註 (例如：少冰、不加香菜)" rows="2"></textarea>
+        </div>
+        
         <ul id="cart-list">
             </ul>
         <p id="total">總計：$0</p>
-        <button id="checkout-btn" onclick="checkout()">立即結帳</button> 
+        <button id="checkout-btn" onclick="event.stopPropagation(); checkout();">立即結帳</button> 
     </div>
 
     <main id="menu-container">
         <section id="booking-section">
-            <h2>📝 線上訂位</h2>
-            <p>為您保留最佳用餐位置！請點擊下方按鈕前往我們的專屬訂位系統。</p>
-            <a href="https://example.com/reservation" target="_blank" class="booking-btn">
-                立即線上預約桌位
+            <h2>📝 線上訂位 </h2>
+            <p>請點擊下方按鈕 查看即時空位並進行預約。</p>
+            
+            <a href="https://calendly.com/anita-chen0201/meet-with-me" target="_blank" class="booking-btn">
+                查看即時空位並預約
             </a>
-            <p style="margin-top: 15px; font-size: 14px; color: #b22222;">(將導向外部訂位系統)</p>
+            
+            <p style="margin-top: 15px; font-size: 14px; color: #b22222;">(將導向您的 Calendly 預約頁面)</p>
         </section>
 
         <div id="menu-list"></div>
@@ -323,6 +398,8 @@
             <h3>感謝您的訂購！</h3>
             <p style="text-align: center; font-style: italic; color: #666;">我們已將訂單送出，稍後為您準備。</p>
             <hr>
+            <div id="modal-customer-info"></div>
+            
             <h4>訂單摘要：</h4>
             <ul id="order-summary"></ul>
             <p id="order-total">最終總計：$0</p>
@@ -340,7 +417,9 @@
     
     <script>
         const cart = {};
+        let total = 0; 
 
+        // 菜單資料 (略)
         const categories = {
             '人氣料理推薦': [
                 ['kimchi.jpg', '泡菜鍋', '酸辣濃郁，暖胃必吃！', 250],
@@ -367,104 +446,127 @@
             '甜點': [
                 ['yuzu_mochi.jpg', '韓式柚子大福', '柚香濃郁，Q彈外皮包裹果香滿溢的內餡。', 100],
                 ['dalgona_ice_cream.jpg', '韓式椪糖霜淇淋', '經典椪糖搭配濃滑霜淇淋，酥脆與綿密的絕妙結合。', 120],
-                ['flat_croissant.jpg', '韓式扁可頌', '壓扁造型更酥脆，層次分明，創新演繹傳統可頌風味。', 110],
+                ['flat_croissant.jpg', '韓式扁可頌', '壓扁造型更酥脆，層次分明的韓式新潮甜點。', 150],
                 ['bento_cake.jpg', '韓式便當小蛋糕', '迷你蛋糕外型可愛，甜而不膩，精緻便當式享受。', 130]
             ]
         };
 
+        // 渲染菜單的函式 (略)
         function renderMenu() {
-            const container = document.getElementById('menu-list'); 
-            for (const [category, items] of Object.entries(categories)) {
-                const section = document.createElement('section');
-                const title = document.createElement('h2');
-                title.textContent = category;
-                section.appendChild(title);
+            const menuList = document.getElementById('menu-list');
+            menuList.innerHTML = ''; 
 
-                const menuDiv = document.createElement('div');
-                menuDiv.className = 'menu';
+            for (const category in categories) {
+                const h2 = document.createElement('h2');
+                h2.textContent = `🍴 ${category}`;
+                menuList.appendChild(h2);
 
-                items.forEach(([img, name, desc, price]) => {
-                    const dish = document.createElement('div');
-                    dish.className = 'dish';
-                    dish.innerHTML = `
-                        <img src="${img}" alt="${name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/200?text=${name}'">
+                const menuContainer = document.createElement('div');
+                menuContainer.className = 'menu';
+
+                categories[category].forEach(dish => {
+                    const [image, name, description, price] = dish;
+                    
+                    const dishElement = document.createElement('div');
+                    dishElement.className = 'dish';
+                    dishElement.innerHTML = `
+                        <img src="${image}" alt="${name}" onerror="this.onerror=null; this.src='https://via.placeholder.com/200?text=${name}'">
                         <h3>${name}</h3>
-                        <p>${desc}</p>
-                        <button onclick="addToCart('${name}', ${price})">加入購物車 ($${price})</button>
+                        <p>${description}</p>
+                        <p>價格：$${price}</p>
+                        <button onclick="addToCart('${name}', ${price}); event.stopPropagation();">加入購物車</button>
                     `;
-                    menuDiv.appendChild(dish);
+                    menuContainer.appendChild(dishElement);
                 });
 
-                section.appendChild(menuDiv);
-                container.appendChild(section);
+                menuList.appendChild(menuContainer);
             }
         }
 
+        // 加入購物車函式 (略)
         function addToCart(name, price) {
             if (cart[name]) {
                 cart[name].qty++;
             } else {
-                cart[name] = { price, qty: 1 };
+                cart[name] = { price: price, qty: 1 };
             }
-            updateCart();
+            updateCartDisplay();
         }
 
-        // 更新購物車列表，加入刪除按鈕
-        function updateCart() {
-            const list = document.getElementById('cart-list');
-            const total = document.getElementById('total');
-            list.innerHTML = '';
-            let sum = 0;
-            for (const [name, item] of Object.entries(cart)) {
-                const li = document.createElement('li');
-                const itemTotal = item.price * item.qty;
-                
-                // 創建顯示品項和價格的文字
-                const itemText = document.createElement('span');
-                itemText.textContent = `${name} x ${item.qty} - $${itemTotal}`;
-                li.appendChild(itemText);
-
-                // 創建刪除按鈕
-                const deleteBtn = document.createElement('span');
-                deleteBtn.textContent = ' ❌'; 
-                deleteBtn.style.cursor = 'pointer';
-                deleteBtn.style.color = '#b22222'; 
-                deleteBtn.title = `移除所有 ${name}`;
-                
-                // 綁定移除函式
-                deleteBtn.onclick = function() {
-                    removeFromCart(name);
-                };
-                
-                li.appendChild(deleteBtn);
-                list.appendChild(li);
-                sum += itemTotal;
-            }
-            total.textContent = `總計：$${sum}`;
-        }
-        
-        // 移除品項的函式
+        // 移除購物車品項的函式 (略)
         function removeFromCart(name) {
             if (cart[name]) {
-                delete cart[name]; // 從 cart 物件中完全刪除該品項
-                updateCart(); // 重新渲染購物車
+                delete cart[name]; 
+                updateCartDisplay(); 
             }
         }
 
-        // 輔助函式：顯示結帳成功 Modal (已精緻化)
-        function displayCheckoutModal(sum) {
+        // 減少購物車數量函式 (略)
+        function decreaseQuantity(name) {
+            if (cart[name] && cart[name].qty > 1) {
+                cart[name].qty--;
+            } else if (cart[name] && cart[name].qty === 1) {
+                delete cart[name]; 
+            }
+            updateCartDisplay();
+        }
+        
+        // 更新購物車顯示函式 (略)
+        function updateCartDisplay() {
+            const cartList = document.getElementById('cart-list');
+            const totalElement = document.getElementById('total');
+            const summaryText = document.getElementById('cart-summary-text');
+            total = 0; 
+            cartList.innerHTML = '';
+
+            for (const name in cart) {
+                const item = cart[name];
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${name} x ${item.qty}</span>
+                    <span>$${itemTotal}</span>
+                    <button style="margin-left: 10px; padding: 3px 6px; background-color: #b22222; color: white; border: none; border-radius: 3px; cursor: pointer;" 
+                            onclick="decreaseQuantity('${name}'); event.stopPropagation();">－</button>
+                    <span style="margin-left: 10px; cursor: pointer; color: #b22222;" 
+                          onclick="removeFromCart('${name}'); event.stopPropagation();" title="移除所有 ${name}">❌</span>
+                `;
+                cartList.appendChild(li);
+            }
+
+            totalElement.textContent = `總計：$${total}`;
+            // 更新 Bar 上的即時總計
+            summaryText.textContent = total > 0 ? ` (總計：$${total})` : ` (總計：$0)`;
+        }
+
+        // 切換購物車展開/收合 (略)
+        function toggleCart() {
+            const cartElement = document.getElementById('cart');
+            cartElement.classList.toggle('expanded');
+        }
+
+        // 輔助函式：顯示結帳成功 Modal (已更新，接收姓名和備註)
+        function displayCheckoutModal(sum, customerName, remarks) {
             const modal = document.getElementById('checkout-modal');
             const summaryList = document.getElementById('order-summary');
             const totalDisplay = document.getElementById('order-total');
-            
+            const infoDiv = document.getElementById('modal-customer-info'); // 取得顧客資訊顯示區
+
             summaryList.innerHTML = ''; 
             
+            // 顯示顧客姓名和備註
+            infoDiv.innerHTML = `
+                <p><strong>顧客姓名:</strong> ${customerName}</p>
+                <p><strong>訂單備註:</strong> ${remarks || '無'}</p>
+                <hr style="margin-top: 15px;">
+            `;
+
             // 遍歷購物車，創建精緻化列表
             for (const [name, item] of Object.entries(cart)) {
                 const itemTotal = item.price * item.qty;
                 const li = document.createElement('li');
-                
-                // 使用 span 標籤並賦予 class，以便 CSS 精確控制排版
                 li.innerHTML = `
                     <span class="item-name">${name} (x${item.qty})</span>
                     <span class="item-price">$${itemTotal}</span>
@@ -477,21 +579,33 @@
             modal.style.display = 'flex';
         }
 
-        // 核心函式：結帳與發送 Email
+        // 核心函式：結帳與發送 Email (已更新，包含姓名和備註)
         function checkout() {
-            if (Object.keys(cart).length === 0) {
+            const customerName = document.getElementById('customer-name').value.trim();
+            const remarks = document.getElementById('order-remarks').value.trim();
+            
+            // 1. 驗證
+            if (total === 0) {
                 alert('請先選擇餐點');
                 return;
             }
+            if (!customerName) {
+                alert('請輸入您的姓名以完成訂購');
+                return;
+            }
 
-            let sum = 0;
             let orderDetailsText = ''; 
+            let sum = total; 
 
             for (const [name, item] of Object.entries(cart)) {
                 const itemTotal = item.price * item.qty;
                 orderDetailsText += `${name} x ${item.qty} = $${itemTotal}\n`;
-                sum += itemTotal;
             }
+            
+            // 將姓名和備註也加入到郵件內容中
+            orderDetailsText += `--- 顧客資訊 ---\n`;
+            orderDetailsText += `顧客姓名: ${customerName}\n`;
+            orderDetailsText += `訂單備註: ${remarks || '無備註'}\n`;
 
             // --- EmailJS 發送郵件邏輯 ---
             const templateParams = {
@@ -499,31 +613,46 @@
                 total_amount: sum, 
                 shop_email: 'anita.chen0201@gmail.com', 
                 order_time: new Date().toLocaleString('zh-TW'),
+                // 額外傳遞姓名和備註 (如果您的 Email 模板有專門的欄位，這會更有用)
+                customer_name: customerName,
+                customer_remarks: remarks || '無備註'
             };
 
-            // ✅ Service ID: service_ezl82r4
-            // ✅ Template ID: template_qa3uc6r
+            // 使用您提供的 Service ID 和 Template ID
             emailjs.send('service_ezl82r4', 'template_qa3uc6r', templateParams)
                 .then(() => {
-                   displayCheckoutModal(sum); 
+                   // 傳遞姓名和備註給 Modal 顯示
+                   displayCheckoutModal(sum, customerName, remarks); 
                 }, (error) => {
                    console.error('訂單郵件發送失敗:', error);
-                   displayCheckoutModal(sum); 
+                   // 即使發送失敗，也先顯示 Modal 讓使用者知道訂單資訊
+                   displayCheckoutModal(sum, customerName, remarks); 
                    alert('系統發生錯誤，訂單郵件可能發送失敗，請手動確認。');
                 });
         }
 
+        // 繼續點餐（關閉 Modal 並清空購物車）(已更新：清空備註欄位)
         function continueOrdering() {
             document.getElementById('checkout-modal').style.display = 'none';
+            // 清空購物車
             for (const key in cart) {
                 delete cart[key];
             }
-            updateCart();
+            // 清空姓名和備註欄位
+            document.getElementById('customer-name').value = '';
+            document.getElementById('order-remarks').value = '';
+
+            updateCartDisplay();
             window.scrollTo(0, 0); 
         }
 
-        window.onload = renderMenu;
+        // 網頁加載時執行 (略)
+        window.onload = function() {
+            renderMenu();
+        };
+
     </script>
 </body>
 </html>
+
 
